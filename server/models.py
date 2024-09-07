@@ -8,7 +8,7 @@ from config import db
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
-    serialize_rules = ('-listings', '-_password_hash')
+    serialize_rules = ('-listings', '-reviews', '-_password_hash')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False, unique='True')
@@ -31,3 +31,25 @@ class User(db.Model, SerializerMixin):
 
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+    
+class Listing(db.Model, SerializerMixin):
+    __tablename__ = 'listings'
+    serialize_rules = ('-reviews')
+    
+    id = db.Column(db.Integer, primary_key=True)
+    item_name = db.Column(db.Integer, nullable=False)
+    image = db.Column(db.String)
+    description = db.Column(db.String, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    reviews = db.relationship('Review', backref='listing')
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, nullable=False)
+    review = db.Column(db.String, nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    listing = db.Column(db.Integer, db.ForeignKey('listings.id'))
+    
