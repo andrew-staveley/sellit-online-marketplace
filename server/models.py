@@ -4,8 +4,6 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 from config import db, bcrypt
 
-from config import db
-
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     serialize_rules = ('-listings', '-reviews', '-_password_hash')
