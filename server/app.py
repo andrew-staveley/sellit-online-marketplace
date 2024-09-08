@@ -32,7 +32,16 @@ class Signup(Resource):
 
 class Login(Resource):
     def post(self):
-        pass
+        req = request.get_json()
+        username = req.get('username')
+        password = req.get('password')
+        user = User.query.filter(User.username == username).first()
+        if user:
+            if user.authenticate(password):
+                session['user_id'] = user.id
+                return user.to_dict(), 200
+            return {'error': 'Invalid Username or Password.'}, 401
+        return {'error': 'Invalid Username or Password.'}, 401
 
 class Logout(Resource):
     def delete(self):
