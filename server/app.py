@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, session
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from config import app, db, api
@@ -6,7 +6,29 @@ from models import User, Listing, Review
 
 class Signup(Resource):
     def post(self):
-        pass
+        req = request.get_json()
+        username = req.get('username')
+        password = req.get('password')
+        name = req.get('name')
+        bio = req.get('bio')
+        city = req.get('city')
+        state = req.get('state')
+
+        user = User(
+            username=username,
+            name=name,
+            bio=bio,
+            city=city,
+            state=state
+        )
+        user.password_hash = password
+        try:
+            db.session.add(user)
+            db.session.commit()
+            session['user_id'] = user.id
+            return user.to_dict(), 201
+        except IntegrityError:
+            return {'error': 'Username is taken.'}, 422
 
 class Login(Resource):
     def post(self):
