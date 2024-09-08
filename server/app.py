@@ -45,11 +45,22 @@ class Login(Resource):
 
 class Logout(Resource):
     def delete(self):
-        pass
+        if session['user_id']:
+            session['user_id'] = None
+            return {}, 204
+        else:
+            return {'error': 'No active session to logout.'}, 401
 
 class CheckSession(Resource):
     def get(self):
-        pass
+        if 'user_id' in session:
+            user = User.query.filter(User.id == session.get('user_id')).first()
+        else:
+            return {"message": "401: Not Authorized"}, 401
+        if user:
+            return user.to_dict(), 201
+        else:
+            return {"message": "401: Not Authorized"}, 401
 
 class Listing(Resource):
     def get(self):
