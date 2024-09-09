@@ -9,12 +9,12 @@ class User(db.Model, SerializerMixin):
     serialize_rules = ('-listings', '-reviews', '-_password_hash')
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique='True')
+    username = db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
     bio = db.Column(db.String)
     city = db.Column(db.String)
-    state = db.column(db.String, nullable=False)
+    state = db.Column(db.String, nullable=False)
     reviews = db.relationship('Review', backref='user')
     listings = db.relationship('Listing', backref='user')
 

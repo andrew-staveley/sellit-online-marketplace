@@ -67,7 +67,8 @@ class Listing(Resource):
         # Gets all listings for specified user
         pass
     def post(self):
-        # Creates listing under specified user
+        req = request.get_json()
+        
         pass
     def delete(self):
         # Deletes specifed listing (Creator Only)
@@ -75,8 +76,10 @@ class Listing(Resource):
 
 class Listings(Resource):
     def get(self):
-        # Gets all listings
-        pass
+        listings = Listing.query.all()
+        if listings:
+            return [listing.to_dict() for listing in listings], 200
+        return {'error': '401: Unauthorized'}, 401
 
 class Review(Resource):
     def get(self):
