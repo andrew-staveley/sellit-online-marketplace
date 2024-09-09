@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Header from "./Header.js"
 import HomePage from "./HomePage.js"
 import LoginPage from "./LoginPage.js"
@@ -16,14 +16,14 @@ function App() {
       <main>
         <Header />
           <Routes>
-            <Route path="/" element={ <HomePage />}/>
-            <Route path="/login" element={ <LoginPage />}/>
-            <Route path='/signup' element={ <SignUpPage />}/>
-            <Route path='/account' element={ <Account />}/>
-            <Route path='/user/:id' element={ <UserPage />}/>
-            <Route path='/listing/:id' element={ <ListingPage />}/>
-            <Route path='/search' element={ <SearchPage />}/>
-            <Route path='/newlisting' element={ <NewListing />}/>
+            <Route path="/" element={ <HomePage /> }/>
+            <Route path="/login" element={ <LoginPage /> }/>
+            <Route path='/signup' element={ <SignUpPage /> }/>
+            <Route path='/account' element={ <Account /> }/>
+            <Route path='/user/:id' element={ <UserPage /> }/>
+            <Route path='/listing/:id' element={ <ListingPage /> }/>
+            <Route path='/search' element={ <SearchPage /> }/>
+            <Route path='/newlisting' element={ <NewListing /> }/>
           </Routes>
       </main>
     </>
