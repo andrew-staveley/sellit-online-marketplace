@@ -11,10 +11,20 @@ import SearchPage from "./SearchPage.js"
 import NewListing from "./ListingPage.js"
 
 function App() {
+  const [session, setSession] = useState([])
+
+  useEffect(() => {
+    fetch("/check_session").then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setSession(user))
+      }
+    })
+  }, [])
+
   return (
     <>
       <main>
-        <Header />
+        <Header session={ session }/>
           <Routes>
             <Route path="/" element={ <HomePage /> }/>
             <Route path="/login" element={ <LoginPage /> }/>
