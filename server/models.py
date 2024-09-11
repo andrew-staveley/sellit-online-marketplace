@@ -15,8 +15,8 @@ class User(db.Model, SerializerMixin):
     bio = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String, nullable=False)
-    reviews = db.relationship('Review', backref='user')
-    listings = db.relationship('Listing', backref='user')
+    reviews = db.relationship('Review')
+    listings = db.relationship('Listing')
 
     @hybrid_property
     def password_hash(self):
@@ -30,6 +30,11 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     
+    @validates('username')
+    def username_validation(self, key, username):
+        new_username = str(username).lower()
+        return new_username
+    
 class Listing(db.Model, SerializerMixin):
     __tablename__ = 'listings'
     serialize_rules = ('-reviews')
@@ -40,14 +45,14 @@ class Listing(db.Model, SerializerMixin):
     description = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
-    reviews = db.relationship('Review', backref='listing')
+    reviews = db.relationship('Review')
 
 class Review(db.Model):
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False)
-    review = db.Column(db.String, nullable=False)
+    review_content = db.Column(db.String, nullable=False)
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
     listing = db.Column(db.Integer, db.ForeignKey('listings.id'))
     
