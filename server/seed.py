@@ -35,16 +35,39 @@ if __name__ == '__main__':
             user.password_hash = user.username + 'password'
             users.append(user)
         db.session.add_all(users)
+        db.session.commit()
         print("Users have been created.")
 
         print("Creating listings...")
         listings = []
         for i in range(100):
             listing = Listing(
-                item_name = fake.random_company_product(),
+                item_name = rc(['Computer', 'iPhone', 'Adult Bike', '55" TV']),
                 image = fake.image_url(),
                 description = fake.paragraph(nb_sentences=2),
-                price = fake.pricetag(),
+                price = randint(0, 1000),
             )
+            listing.user = rc(users).id
+            listings.append(listing)
+        db.session.add_all(listings)
+        db.session.commit()
+        print("Listings have been create.")
+
+        print("Creating reviews...")
+        reviews = []
+        for i in range(200):
+            review = Review(
+                rating = rc(range(5)),
+                review_content = fake.paragraph(nb_sentences=2),
+            )
+            review.user = rc(users).id
+            review.listing = rc(listings).id
+            reviews.append(review)
+        db.session.add_all(reviews)
+        print("Reviews have been created.")
+
+        print("Committing to database...")
+        db.session.commit()
+        print("Complete.")
             
     
